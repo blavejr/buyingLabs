@@ -7,50 +7,14 @@ import { useNavigate } from "react-router-dom";
 import loading from "../../loading.jpg";
 import cx from "classnames";
 import styles from "./Home.module.scss";
-
-interface Hotel {
-  name: string;
-  city: string;
-  country: string;
-  // No need to return this from the backend, simply dont return the hotel if it's not available
-  availability: boolean;
-  price: number;
-  photos?: string[];
-}
-
-interface HotelResponse {
-  currentPage: number;
-  itemsPerPage: number;
-  totalItems: number;
-  totalPages: number;
-  data: Hotel[];
-}
-
-const loadingData: HotelResponse = {
-  currentPage: 1,
-  itemsPerPage: 3,
-  totalItems: 1,
-  totalPages: 1,
-  data: [
-    {
-      name: "Loading Hotel",
-      city: "Loading City",
-      country: "Loading Country",
-      availability: true,
-      price: 100,
-      photos: [
-        "https://www.usatoday.com/gcdn/-mm-/05b227ad5b8ad4e9dcb53af4f31d7fbdb7fa901b/c=0-64-2119-1259/local/-/media/USATODAY/USATODAY/2014/08/13/1407953244000-177513283.jpg",
-        "https://cdn.britannica.com/96/115096-050-5AFDAF5D/Bellagio-Hotel-Casino-Las-Vegas.jpg",
-        "https://media.istockphoto.com/id/472899538/de/foto/eingang-von-hotel-in-der-innenstadt-von-cleveland-und-warten-taxi-cab.jpg?s=612x612&w=0&k=20&c=ubhNtUm-szjVlg7LJ3TeV36Pd27cuiRyA8n2z4oScOA=",
-      ],
-    },
-  ],
-};
+import { IHotel, IHotelResponse } from "../../types";
+import { hotelResponse } from "../../utils/state";
+import TSearchBar from "../../components/TSearchBar/TSearchBar";
 
 const Home: React.FC = () => {
   const [responseData, setResponseData] =
-    React.useState<HotelResponse>(loadingData);
-  const [hotels, setHotels] = React.useState<Hotel[]>([]);
+    React.useState<IHotelResponse>(hotelResponse);
+  const [hotels, setHotels] = React.useState<IHotel[]>([]);
   const [page, setPage] = useState(1);
   const lastElementRef = useRef<HTMLDivElement>(null);
   const [searchTerm, setSearchTerm] = useState("");
@@ -64,7 +28,7 @@ const Home: React.FC = () => {
 
   // Initial load
   useEffect(() => {
-    hotelAPI.gethotels(page, 3, searchTerm).then((response: HotelResponse) => {
+    hotelAPI.gethotels(page, 3, searchTerm).then((response: IHotelResponse) => {
       setResponseData(response);
       setHotels(response.data);
     });
@@ -105,22 +69,7 @@ const Home: React.FC = () => {
         <div>
           <h1>Welcome to Travolta Hotels</h1>
         </div>
-        <div className={cx(styles.searchContainer)}>
-          <input
-            className={cx(styles.searchInput)}
-            type="text"
-            placeholder="What is your destination?"
-            onChange={(event) => {
-              setSearchTerm(event.target.value);
-              setPage(1);
-            }}
-          />
-          <input type="text" placeholder="date..." />
-          <input type="text" placeholder="date..." />
-          <input type="text" placeholder="number of people..." />
-        </div>
-        {/* <div>Hotels count: {hotels?.length}</div>
-        <div>Page count: {page}</div> */}
+        <TSearchBar setSearchTerm={setSearchTerm} setPage={setPage} />
       </header>
       <div className={cx(styles.hotelListContainer)}>
         {hotels?.map((hotel: any, _index: number) => (

@@ -8,16 +8,14 @@ import Home from "./pages/Home/Home";
 const BrowserRouter = createBrowserRouter([
   {
     path: "/",
-    element: (
-        <Home />
-    ),
-  }
+    element: <Home />,
+  },
 ]);
 
 function App() {
   return (
     <div className={cx(styles.App)}>
-        <RouterProvider router={BrowserRouter} />
+      <RouterProvider router={BrowserRouter} />
     </div>
   );
 }

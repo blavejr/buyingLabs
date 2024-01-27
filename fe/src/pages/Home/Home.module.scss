@@ -1,11 +1,4 @@
-// Common variables
-$color-primary: #f9f9f9;
-$color-secondary: #d9d9d9;
-$color-tertiary: #a7a7a7;
-$primary-border-radius: 1em;
-$breakpoint: 768px;
-$hotel-item-width: 24%;
-$hotel-item-height: 300px;
+@import '../../styles/variables.scss';
 
 header {
   position: fixed;
@@ -31,40 +24,6 @@ header {
   a {
     text-decoration: none;
     color: #000;
-  }
-}
-
-.searchContainer {
-    display: flex;
-    flex-direction: row;
-    max-width: 50%;
-    margin: 0 auto;
-    padding-bottom: 2em;
-  input {
-    width: 100%;
-    height: 50px;
-    border-radius: 5px;
-    border: .1em solid;
-    padding: 0 1em;
-    font-size: 20px;
-    border-color: $color-secondary;
-    margin-right: 1em;
-    &:focus {
-      outline: none;
-    }
-  }
-  .searchButton{
-    background-color: $color-primary;
-    border-radius: 5px;
-    border: 1px none;
-    padding: 0 1em;
-    font-size: 20px;
-    &:focus {
-      outline: none;
-    }
-    &:hover {
-      background-color: $color-secondary;
-    }
   }
 }
 
