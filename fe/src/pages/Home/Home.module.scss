@@ -1,0 +1,141 @@
+// Common variables
+$color-primary: #f9f9f9;
+$color-secondary: #d9d9d9;
+$color-tertiary: #a7a7a7;
+$primary-border-radius: 1em;
+$breakpoint: 768px;
+$hotel-item-width: 24%;
+$hotel-item-height: 300px;
+
+header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background-color: white;
+  padding-top: 2em;
+  h1{
+    text-align: center;
+    font-size: 3em;
+    padding-bottom: .5em;
+  }
+}
+
+.navList {
+  display: flex;
+  justify-content: space-between;
+  flex-shrink: 1;
+
+  li {
+    list-style: none;
+  }
+  a {
+    text-decoration: none;
+    color: #000;
+  }
+}
+
+.searchContainer {
+    display: flex;
+    flex-direction: row;
+    max-width: 50%;
+    margin: 0 auto;
+    padding-bottom: 2em;
+  input {
+    width: 100%;
+    height: 50px;
+    border-radius: 5px;
+    border: .1em solid;
+    padding: 0 1em;
+    font-size: 20px;
+    border-color: $color-secondary;
+    margin-right: 1em;
+    &:focus {
+      outline: none;
+    }
+  }
+  .searchButton{
+    background-color: $color-primary;
+    border-radius: 5px;
+    border: 1px none;
+    padding: 0 1em;
+    font-size: 20px;
+    &:focus {
+      outline: none;
+    }
+    &:hover {
+      background-color: $color-secondary;
+    }
+  }
+}
+
+.hotelListContainer {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 1;
+
+  .hotelListItem {
+    display: flex;
+    background-color: $color-tertiary;
+    margin-top: 2em;
+    flex-direction: row;
+    flex-shrink: 1;
+    border: 1px solid #000;
+    width: 100%;
+    border-radius: $primary-border-radius;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5em;
+
+    img {
+      border-radius: $primary-border-radius;
+      flex-shrink: 1;
+      height: $hotel-item-height;
+      width: $hotel-item-width;
+      padding: 0.1em;
+    }
+
+    .hotelInfo {
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 1;
+      padding: 0.5em;
+      height: $hotel-item-height;
+      width: $hotel-item-width;
+      background-color: $color-primary;
+      border-radius: $primary-border-radius;
+      justify-content: center;
+      align-items: center;
+      .hotelName {
+        font-size: 20px;
+        font-weight: bold;
+      }
+
+      .hotelCity {
+        font-size: 15px;
+      }
+
+      .hotelCountry {
+        font-size: 15px;
+      }
+
+      .hotelAvailability {
+        font-size: 15px;
+      }
+
+      .hotelPrice {
+        font-size: 20px;
+        font-weight: bold;
+      }
+    }
+
+    @media screen and (max-width: $breakpoint) {
+      flex-direction: column;
+      justify-content: space-between;
+      img,
+      .hotelInfo {
+        height: $hotel-item-height;
+        width: 100%;
+      }
+    }
+  }
+}

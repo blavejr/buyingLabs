@@ -1,0 +1,10 @@
+.App {
+  text-align: center;
+  margin: 10em;
+}
+
+@media screen and (max-width: 768px) {
+  .App {
+    margin: 1em;
+  }
+}
