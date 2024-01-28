@@ -80,7 +80,7 @@ function generateRandomDateRange(): { start: Date; end: Date } {
   startDate.setDate(startDate.getDate() + generateRandomNumber(1, 30));
 
   const endDate = new Date(startDate);
-  endDate.setDate(endDate.getDate() + generateRandomNumber(1, 90)); 
+  endDate.setDate(endDate.getDate() + generateRandomNumber(1, 365)); 
 
   return { start: startDate, end: endDate };
 }

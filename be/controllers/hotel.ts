@@ -1,40 +1,35 @@
 import { IHotel, IAPIResponseType } from "../types";
 import HotelModel from "../models/hotel";
+import { Moment } from "moment";
+import { filterByAvailability, filterBySearchCountryOrCity } from "../utils/filters";
+import { paginate } from "../utils/pagination";
 
 export async function gethotels(
   currentPage: number = 1,
   itemsPerPage: number = 4,
-  searchTerm: string = ""
+  searchTerm: string = "",
+  startDate?: Moment,
+  endDate?: Moment,
+  numberOfPeople: number = 1
 ): Promise<IAPIResponseType | { success: boolean; message: string }> {
   try {
-    const query: any = {};
-    const lowerCaseSearch: string = searchTerm.toLowerCase();
+    // getting all the data from the DB every time is not efficient and is a very expensive operation
+    // but since the db was not part of the task, I decided to not use complicated queries and rather do the filtering in arrays as if the data was hardcoded
+    const allHotels: IHotel[] = await HotelModel.find({}).exec();
 
-    if (searchTerm && searchTerm !== "") {
-      // If search term is provided, filter by name or city
-      query.$or = [
-        { name: { $regex: lowerCaseSearch, $options: "i" } },
-        { city: { $regex: lowerCaseSearch, $options: "i" } },
-      ];
-    }
+    const filteredHotelsByCountryAndCity = filterBySearchCountryOrCity(
+      allHotels,
+      searchTerm
+    );
 
-    // Execute the query to get paginated and filtered results
-    const result: IHotel[] = await HotelModel.find(query)
-      .skip((currentPage - 1) * itemsPerPage)
-      .limit(itemsPerPage)
-      .exec();
+    const filteredByAvailability = filterByAvailability(
+      filteredHotelsByCountryAndCity,
+      startDate,
+      endDate
+    );
 
-    // Get the total count for pagination
-    const totalCount: number = await HotelModel.countDocuments(query).exec();
+    return paginate(currentPage, itemsPerPage, filteredByAvailability);
 
-    return {
-      currentPage,
-      itemsPerPage,
-      totalItems: totalCount,
-      totalPages: Math.ceil(totalCount / itemsPerPage),
-      success: true,
-      data: result,
-    };
   } catch (error) {
     console.error("Error fetching hotels:", error);
     return { success: false, message: "Error fetching hotels" };
