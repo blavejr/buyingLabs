@@ -1,70 +1,78 @@
 import React, { useEffect, useRef, useState } from "react";
 import hotelAPI from "../../api/hotel";
-import loading from "../../loading.jpg";
 import cx from "classnames";
 import styles from "./Home.module.scss";
-import { IHotel, IHotelResponse } from "../../types";
-import { hotelResponse } from "../../utils/state";
+import { IHotel, IHotelResponse, ISearchData } from "../../types";
+import { initSearchData } from "../../utils/state";
 import TSearchBar from "../../components/TSearchBar/TSearchBar";
 import THotelList from "../../components/THotelList/THotelList";
+import { loadHotels } from "../../utils/loadHotels";
+
+const PAGE_SIZE = 3;
 
 const Home: React.FC = () => {
-  const [responseData, setResponseData] =
-    React.useState<IHotelResponse>(hotelResponse);
+  // I will use normal state as this is a small app and I don't need to use Redux or Context API
+  const [totalPages, setTotalPages] =
+    React.useState<number>(0);
   const [hotels, setHotels] = React.useState<IHotel[]>([]);
   const [page, setPage] = useState(1);
   const lastElementRef = useRef<HTMLDivElement>(null);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchData, setSearchData] = useState<ISearchData>(initSearchData);
+  const [errorMessage, setErrorMessage] = useState<string>("");
 
   // Initial load
   useEffect(() => {
-    hotelAPI.gethotels(page, 3, searchTerm).then((response: IHotelResponse) => {
-      setResponseData(response);
-      setHotels(response.data);
-    });
-  }, [searchTerm]);
+    hotelAPI
+      .gethotels(page, PAGE_SIZE, searchData?.searchTerm)
+      .then((response: IHotelResponse) => {
+        setTotalPages(response.totalPages);
+        setHotels(response.data);
+      });
+  }, [searchData?.searchTerm]);
 
   // Infinite scroll
   useEffect(() => {
+    // create an observer to watch the last element
     const observer = new IntersectionObserver(onIntersect);
+    // if the last element exists, start observing it
     if (observer && lastElementRef.current) {
       observer.observe(lastElementRef.current);
     }
 
     return () => {
+      // stop observing the last element
       if (observer && lastElementRef.current) {
         observer.disconnect();
       }
     };
-  }, [hotels, searchTerm]);
+  }, [hotels, searchData?.searchTerm]);
 
+  // Load more hotels when the last element is visible
   function onIntersect(entries: any) {
     const target = entries[0];
     if (target.isIntersecting) {
-      loadHotels();
+      loadHotels(
+        page,
+        PAGE_SIZE,
+        totalPages,
+        searchData?.searchTerm,
+        setPage,
+        setHotels,
+        hotelAPI
+      );
     }
   }
-
-  const loadHotels = async () => {
-    if (page <= responseData.totalPages) {
-      setPage((prevPage) => prevPage + 1);
-      try {
-        const response = await hotelAPI.gethotels(page, 3, searchTerm);
-        setHotels((prevHotels) => [...prevHotels, ...response.data]);
-      } catch (error) {
-        console.error("Error loading more hotels:", error);
-      } finally {
-        console.log("finally");
-        // setLoading(false);
-      }
-    }
-  };
 
   return (
     <div>
       <header className={cx(styles.header)}>
         <h1>Welcome to Travolta Hotels</h1>
-        <TSearchBar setSearchTerm={setSearchTerm} setPage={setPage} />
+        <TSearchBar
+          setSearchData={setSearchData}
+          setPage={setPage}
+          setErrorMessage={setErrorMessage}
+        />
+        {errorMessage && <p className={styles.errorMessage}>{errorMessage}</p>}
       </header>
       <THotelList hotels={hotels} lastElementRef={lastElementRef} />
     </div>

@@ -15,3 +15,10 @@ export interface IHotel {
     totalPages: number;
     data: IHotel[];
   }
+
+  export interface ISearchData {
+    searchTerm: string;
+    startDate: Date;
+    endDate: Date;
+    numberOfPeople: string;
+  }
