@@ -12,8 +12,7 @@ const PAGE_SIZE = 3;
 
 const Home: React.FC = () => {
   // I will use normal state as this is a small app and I don't need to use Redux or Context API
-  const [totalPages, setTotalPages] =
-    React.useState<number>(0);
+  const [totalPages, setTotalPages] = React.useState<number>(0);
   const [hotels, setHotels] = React.useState<IHotel[]>([]);
   const [page, setPage] = useState(1);
   const lastElementRef = useRef<HTMLDivElement>(null);
@@ -45,7 +44,7 @@ const Home: React.FC = () => {
         observer.disconnect();
       }
     };
-  }, [hotels, searchData?.searchTerm]);
+  }, [hotels]);
 
   // Load more hotels when the last element is visible
   function onIntersect(entries: any) {
