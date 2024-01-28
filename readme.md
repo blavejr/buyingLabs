@@ -7,6 +7,21 @@ This repository contains the configuration files for setting up the Travolta app
 - Docker
 - Docker Compose
 
+docker will create 3 containers
+- Frontend
+- Backend
+- mongo
+
+The mongo database is not needed but it was simple to add
+and it's just running a query to get all the data
+
+there are scripts in be/db to drop and prefill the database
+
+the Filtering is all done in JavaScript with array manipulation
+i decided you not do filtering via db queries or pipelines because 
+the initial instructions stated the db was out of scope and is only a
+data store now.
+
 ## Getting Started
 
 1. Clone this repository to your local machine.
