@@ -1,8 +1,9 @@
 import { ISearchData } from "../types";
+import moment from "moment";
 
 export const initSearchData: ISearchData = {
-    searchTerm: "",
-    startDate: new Date(),
-    endDate: new Date(),
-    numberOfPeople: "1",
-  }
+  searchTerm: "",
+  startDate: moment().toDate(),
+  endDate: moment().add(30, "days").toDate(),
+  numberOfPeople: "1",
+};

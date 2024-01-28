@@ -8,21 +8,21 @@ import moment from "moment";
 import { ISearchData } from "../../types";
 
 interface TSearchBarProps {
-  setSearchData: React.Dispatch<
-    React.SetStateAction<ISearchData>
-  >;
+  setSearchData: React.Dispatch<React.SetStateAction<ISearchData>>;
   setPage: React.Dispatch<React.SetStateAction<number>>;
   setErrorMessage: React.Dispatch<React.SetStateAction<string>>;
+  searchData: ISearchData;
 }
 
 export default function TSearchBar({
   setSearchData,
   setPage,
   setErrorMessage,
+  searchData,
 }: TSearchBarProps) {
   const [searchTerm, setSearchTerm] = useState("");
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
+  const [startDate, setStartDate] = useState(searchData.startDate);
+  const [endDate, setEndDate] = useState(searchData.endDate);
   const [numberOfPeople, setNumberOfPeople] = useState("1");
   const handleSelectChange = (event: {
     target: { value: React.SetStateAction<string> };

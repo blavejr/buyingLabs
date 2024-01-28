@@ -22,12 +22,15 @@ const Home: React.FC = () => {
   // Initial load
   useEffect(() => {
     hotelAPI
-      .gethotels(page, PAGE_SIZE, searchData?.searchTerm)
-      .then((response: IHotelResponse) => {
+      .gethotels({ page, count: PAGE_SIZE, ...searchData })
+      .then((response: IHotelResponse & {message: string}) => {
         setTotalPages(response.totalPages);
         setHotels(response.data);
+      })
+      .catch((error) => {
+        setErrorMessage(error.message);
       });
-  }, [searchData?.searchTerm]);
+  }, [searchData]);
 
   // Infinite scroll
   useEffect(() => {
@@ -54,7 +57,7 @@ const Home: React.FC = () => {
         page,
         PAGE_SIZE,
         totalPages,
-        searchData?.searchTerm,
+        searchData,
         setPage,
         setHotels,
         hotelAPI
@@ -70,6 +73,7 @@ const Home: React.FC = () => {
           setSearchData={setSearchData}
           setPage={setPage}
           setErrorMessage={setErrorMessage}
+          searchData={searchData}
         />
         {errorMessage && <p className={styles.errorMessage}>{errorMessage}</p>}
       </header>

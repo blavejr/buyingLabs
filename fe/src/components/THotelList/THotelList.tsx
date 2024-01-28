@@ -2,6 +2,7 @@ import React from "react";
 import cx from "classnames";
 import styles from "./THotelList.module.scss";
 import { IHotel } from "../../types";
+import moment from "moment";
 
 interface THotelListProps {
   hotels: IHotel[];
@@ -25,7 +26,15 @@ export default function THotelList({
             <p className={cx(styles.hotelCity)}>City: {hotel.city}</p>
             <p className={cx(styles.hotelCountry)}>Country: {hotel.country}</p>
             <p>
-              Availability: {hotel.availability ? "Available" : "Not Available"}
+              Availability:{" "}
+              {hotel.availability === false ? (
+                "Not Available"
+              ) : (
+                <p>
+                  {moment(hotel.availability.start).format("DD/MM/YYYY")} -{" "}
+                  {moment(hotel.availability.end).format("DD/MM/YYYY")}
+                </p>
+              )}
             </p>
             <p className={cx(styles.price)}>Price: {hotel.price} eur</p>
           </div>
