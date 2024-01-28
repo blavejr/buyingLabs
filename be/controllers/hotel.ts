@@ -1,30 +1,42 @@
-import generateDummyHotelData from "../utils/generateDummyHotelData";
-import paginate from "../utils/paginate";
 import { IHotel, IAPIResponseType } from "../types";
+import HotelModel from "../models/hotel";
 
-const dummyHotelData: IHotel[] = generateDummyHotelData(10000);
-
-export function gethotels(
+export async function gethotels(
   currentPage: number = 1,
   itemsPerPage: number = 4,
   searchTerm: string = ""
-): IAPIResponseType {
-  const lowerCaseSearch = searchTerm.toLowerCase();
-  // if no search term is provided, return all hotels
-  if (!searchTerm || searchTerm === "") {
-    return paginate(dummyHotelData, currentPage, itemsPerPage);
-  }
-  // if search term is provided, filter hotels by search term
-  const searchRes: IHotel[] = dummyHotelData.filter((hotel) => {
-    // search by city and country
-    const lowerCaseCity = hotel.city.toLowerCase();
-    const lowerCaseCountry = hotel.country.toLowerCase();
-    if (
-      lowerCaseCity.includes(lowerCaseSearch) ||
-      lowerCaseCountry.includes(lowerCaseSearch)
-    ) {
-      return hotel;
+): Promise<IAPIResponseType | { success: boolean; message: string }> {
+  try {
+    const query: any = {};
+    const lowerCaseSearch: string = searchTerm.toLowerCase();
+
+    if (searchTerm && searchTerm !== "") {
+      // If search term is provided, filter by name or city
+      query.$or = [
+        { name: { $regex: lowerCaseSearch, $options: "i" } },
+        { city: { $regex: lowerCaseSearch, $options: "i" } },
+      ];
     }
-  });
-  return paginate(searchRes, currentPage, itemsPerPage);
+
+    // Execute the query to get paginated and filtered results
+    const result: IHotel[] = await HotelModel.find(query)
+      .skip((currentPage - 1) * itemsPerPage)
+      .limit(itemsPerPage)
+      .exec();
+
+    // Get the total count for pagination
+    const totalCount: number = await HotelModel.countDocuments(query).exec();
+
+    return {
+      currentPage,
+      itemsPerPage,
+      totalItems: totalCount,
+      totalPages: Math.ceil(totalCount / itemsPerPage),
+      success: true,
+      data: result,
+    };
+  } catch (error) {
+    console.error("Error fetching hotels:", error);
+    return { success: false, message: "Error fetching hotels" };
+  }
 }
