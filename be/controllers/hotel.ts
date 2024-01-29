@@ -15,12 +15,13 @@ export async function gethotels(
   numberOfPeople: number = 1
 ): Promise<IAPIResponseType | { success: boolean; message: string }> {
   try {
-    // We could hash this key to make it shorter
-    const caxheKey = `${currentPage}-${itemsPerPage}-${searchTerm}-${startDate?.format("YYYY-MM-DD")}-${endDate?.format("YYYY-MM-DD")}-${numberOfPeople}`;
-    if (memoizedDBData.has(caxheKey)) {
-      return memoizedDBData.get(caxheKey) as IAPIResponseType;
+    // Include information about both the current page and the next page in the cache key
+    const cacheKey = `${currentPage}-${itemsPerPage}-${searchTerm}-${startDate?.format("YYYY-MM-DD")}-${endDate?.format("YYYY-MM-DD")}-${numberOfPeople}`;
+
+    if (memoizedDBData.has(cacheKey)) {
+      return memoizedDBData.get(cacheKey) as IAPIResponseType;
     }
-    
+
     const allHotels: IHotel[] = await HotelModel.find({}).exec();
 
     const filteredHotelsByCountryAndCity = filterBySearchCountryOrCity(
@@ -34,9 +35,18 @@ export async function gethotels(
       endDate
     );
 
-    memoizedDBData.set(caxheKey, paginate(currentPage, itemsPerPage, filteredByAvailability));
+    const paginatedData = paginate(currentPage, itemsPerPage, filteredByAvailability);
+    memoizedDBData.set(cacheKey, paginatedData);
 
-    return memoizedDBData.get(caxheKey) as IAPIResponseType;
+    // Include information about the next page in the cache key for the next page's data
+    // This can also be used to cache data for the next 2 pages, 3 pages, etc. by using a loop
+    const nextPageCacheKey = `${currentPage + 1}-${itemsPerPage}-${searchTerm}-${startDate?.format("YYYY-MM-DD")}-${endDate?.format("YYYY-MM-DD")}-${numberOfPeople}`;
+    if (!memoizedDBData.has(nextPageCacheKey)) {
+      const nextPageData = paginate(currentPage + 1, itemsPerPage, filteredByAvailability);
+      memoizedDBData.set(nextPageCacheKey, nextPageData);
+    }
+
+    return paginatedData;
 
   } catch (error) {
     console.error("Error fetching hotels:", error);
