@@ -15,8 +15,10 @@ COPY . .
 # compile typescript
 RUN npm run compile
 
+RUN npm run db:drop
+
 # Expose port 3001
 EXPOSE 3001
 
 # Run migrations and start the app
-CMD [ "sh", "-c", "npm start" ]
+CMD [ "sh", "-c", "npm run db:seed && npm start" ]

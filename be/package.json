@@ -7,6 +7,9 @@
     "test": "./node_modules/jest/bin/jest.js --detectOpenHandles",
     "compile": "./node_modules/typescript/bin/tsc",
     "run:dev": "npm run compile && node ./bin/server.js",
+    "db:drop": "node bin/db/dropDB.js",
+    "db:seed": "node bin/db/prefill.js",
+    "db:migrate": "npm run db:drop && npm run db:seed",
     "start": "./node_modules/nodemon/bin/nodemon.js -e ts  --exec \"npm run run:dev\""
   },
   "author": "",

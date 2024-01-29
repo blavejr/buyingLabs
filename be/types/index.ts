@@ -1,6 +1,6 @@
 import { Document } from "mongoose";
 
-export interface IHotel extends Document {
+export interface IHotel {
   name: string;
   city: string;
   country: string;
