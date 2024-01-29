@@ -15,7 +15,7 @@ DB_.once("connected", () => {
 async function prefill() {
   try {
     await mongoose.connect("mongodb://mongo:27017/travolta");
-    await HotelModel.insertMany(generateDummyHotelData(100000));
+    await HotelModel.insertMany(generateDummyHotelData(1000));
     console.log("Database prefill successful");
   } finally {
     console.log("Database prefill complete");

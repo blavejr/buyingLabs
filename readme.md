@@ -13,7 +13,10 @@ docker will create 3 containers
 - mongo
 
 ## Databse
-The mongo database is not needed but it was simple to add (it will be prefilled with 100,000 random data)
+The mongo database is not needed but it was simple to add
+
+it will be prefilled with 1000 random data, this can be reduced or increased in the file /be/db/prefill.ts
+
 and it's just running a query to get all the data, I have thought about adding queries and pipelines to do the filtering and quering in the database
 but thought maybe we would like to see the array manipulation I would be doing and thus have gone with a more inefficient method which is to get all the
 data from the database for each request and do the filtering manually through arrays.
