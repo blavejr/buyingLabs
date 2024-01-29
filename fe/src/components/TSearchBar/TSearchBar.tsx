@@ -14,6 +14,8 @@ interface TSearchBarProps {
   searchData: ISearchData;
 }
 
+const DATE_FORMAT = "YYYY-MM-DD";
+
 export default function TSearchBar({
   setSearchData,
   setPage,
@@ -69,6 +71,7 @@ export default function TSearchBar({
         id="startDate"
         selected={startDate}
         onChange={(date: Date) => setStartDate(date)}
+        dateFormat={DATE_FORMAT}
         aria-label="Start Date"
       />
       <label htmlFor="endDate">End Date:</label>
@@ -76,6 +79,7 @@ export default function TSearchBar({
         id="endDate"
         selected={endDate}
         onChange={(date: Date) => setEndDate(date)}
+        dateFormat={DATE_FORMAT}
         aria-label="End Date"
       />
       <div>

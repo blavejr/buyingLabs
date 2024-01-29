@@ -8,7 +8,9 @@ header {
   padding-top: 2em;
   h1{
     text-align: center;
-    font-size: 3em;
+    font-size: 5em;
+    font-weight: bold;
+    color: $color-tertiary;
     padding-bottom: .5em;
   }
   .errorMessage {
