@@ -2,46 +2,27 @@ import express, { Request, Response } from "express";
 import moment, { Moment } from "moment";
 import * as hotelController from "../controllers/hotel";
 import { isValidDateRange } from "../utils/dates";
+import { validateGetHotelParameters } from "../validation/routes";
 
 const router = express.Router();
 
 router.get("/", async (req: Request, res: Response) => {
-  const {
-    page,
-    count,
-    searchTerm,
-    startDate,
-    endDate,
-    numberOfPeople,
-    ...other
-  } = req.query;
-
-  const currentPage = parseInt(page as string);
-  const itemsPerPage = parseInt(count as string);
-  const numberOfPeopleInt = parseInt(numberOfPeople as string);
-
-  // if other query params are present, return 400
-  if (
-    Object.keys(other).length ||
-    !isValidDateRange(startDate as string, endDate as string)
-  ) {
-    res.status(400).json({ message: "Bad request" });
-    return;
-  }
-
-  // Validate parameters
-  if (currentPage < 1 || itemsPerPage < 1) {
-    res.status(400).json({ message: "Bad request" });
-    return;
+  const vGetHotelParams = validateGetHotelParameters(req);
+  // if validation fails, return 400
+  // I want to keep all responses in the routes file
+  if (!vGetHotelParams) {
+    return res
+      .status(400)
+      .json({ success: false, message: "Invalid parameters" });
   }
 
   const results = await hotelController.gethotels(
-    currentPage,
-    itemsPerPage,
-    searchTerm as string,
-    moment(startDate as string),
-    moment(endDate as string),
-    numberOfPeopleInt
+    vGetHotelParams.currentPage,
+    vGetHotelParams.itemsPerPage,
+    vGetHotelParams.searchTerm as string,
+    moment(vGetHotelParams.startDate as string),
+    moment(vGetHotelParams.endDate as string),
+    vGetHotelParams.numberOfPeopleInt
   );
   res.json(results);
 });

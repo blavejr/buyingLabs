@@ -10,5 +10,6 @@ export function paginate(currentPage: number, itemsPerPage: number, dataArr: any
       totalPages: Math.ceil(dataArr.length / itemsPerPage),
       success: true,
       data: paginatedResults,
+      message: "Successfully fetched hotels",
     };
 }

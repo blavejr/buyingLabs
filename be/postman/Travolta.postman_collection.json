@@ -1,0 +1,55 @@
+{
+	"info": {
+		"_postman_id": "910bac10-833b-4ee4-9daa-8b7e844aba6f",
+		"name": "Travolta",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "1982435"
+	},
+	"item": [
+		{
+			"name": "hotels search",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3001/hotel?page=1&count=3&searchTerm=&startDate=2024-01-28&endDate=2024-01-28&numberOfPeople=1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3001",
+					"path": [
+						"hotel"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "count",
+							"value": "3"
+						},
+						{
+							"key": "searchTerm",
+							"value": ""
+						},
+						{
+							"key": "startDate",
+							"value": "2024-01-28"
+						},
+						{
+							"key": "endDate",
+							"value": "2024-01-28"
+						},
+						{
+							"key": "numberOfPeople",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

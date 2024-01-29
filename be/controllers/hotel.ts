@@ -16,7 +16,7 @@ export async function gethotels(
   startDate?: Moment,
   endDate?: Moment,
   numberOfPeople: number = 1
-): Promise<IAPIResponseType | { success: boolean; message: string }> {
+): Promise<IAPIResponseType> {
   try {
     // Include information about both the current page and the next page in the cache key
     const cacheKey = `${currentPage}-${itemsPerPage}-${searchTerm}-${startDate?.format("YYYY-MM-DD")}-${endDate?.format("YYYY-MM-DD")}-${numberOfPeople}`;

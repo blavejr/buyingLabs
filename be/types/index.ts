@@ -12,9 +12,11 @@ export interface IHotel {
 }
 
 export type IAPIResponseType = {
-  currentPage: number;
-  itemsPerPage: number;
-  totalItems: number;
-  totalPages: number;
-  data: IHotel[];
+  currentPage?: number;
+  itemsPerPage?: number;
+  totalItems?: number;
+  totalPages?: number;
+  data?: IHotel[];
+  success?: boolean;
+  message?: string;
 };

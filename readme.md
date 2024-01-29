@@ -54,6 +54,12 @@ data store now.
 
 4. Access the frontend application at [http://localhost:3000](http://localhost:3000).
 
+# Testing
+To make testing easier there is a postman file
+`/Users/deathnote/Desktop/work/buyingLabs/be/postman/Travolta.postman_collection.json`
+
+it has the single endpoint with some query params
+
 ## Performace
 
 Since this is a simple test app I have made some perfomance adjustments but not too many
