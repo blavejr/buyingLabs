@@ -20,3 +20,15 @@ export type IAPIResponseType = {
   success?: boolean;
   message?: string;
 };
+
+export interface ValidatedRequest extends Request {
+  validatedParams?: {
+    currentPage: number;
+    itemsPerPage: number;
+    searchTerm: string;
+    startDate: string;
+    endDate: string;
+    numberOfPeopleInt: number;
+  };
+}
+
