@@ -4,6 +4,8 @@ import { Moment } from "moment";
 import { filterByAvailability, filterBySearchCountryOrCity } from "../utils/filters";
 import { paginate } from "../utils/pagination";
 
+// The size of this cache is limited by the amount of memory available to the Node process
+// But can be increased by using a database like Redis
 const memoizedDBData = new Map<string, IAPIResponseType>();
 
 export async function gethotels(
