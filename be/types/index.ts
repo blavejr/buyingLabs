@@ -1,5 +1,3 @@
-import { Document } from "mongoose";
-
 export interface IHotel {
   name: string;
   city: string;
