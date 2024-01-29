@@ -1,8 +1,7 @@
-// routes.ts
 import express, { Response, NextFunction } from 'express';
 import moment from 'moment';
 import * as hotelController from '../controllers/hotel';
-import { validateGetHotelParamsMiddleware, ValidatedRequest } from '../validation/routes'; // Update the import
+import { validateGetHotelParamsMiddleware, ValidatedRequest } from '../middleware/routes.validatoin';
 
 const router = express.Router();
 
