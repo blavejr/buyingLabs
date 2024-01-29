@@ -14,7 +14,7 @@ interface TSearchBarProps {
   searchData: ISearchData;
 }
 
-const DATE_FORMAT = "YYYY-MM-DD";
+const DATE_FORMAT = "YYYY-mm-dd";
 
 export default function TSearchBar({
   setSearchData,
