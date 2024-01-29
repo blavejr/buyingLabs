@@ -4,6 +4,7 @@ import cx from "classnames";
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./pages/Home/Home";
+import { HotelProvider } from "./context";
 
 const BrowserRouter = createBrowserRouter([
   {
@@ -15,7 +16,9 @@ const BrowserRouter = createBrowserRouter([
 function App() {
   return (
     <div className={cx(styles.App)}>
-      <RouterProvider router={BrowserRouter} />
+      <HotelProvider>
+        <RouterProvider router={BrowserRouter} />
+      </HotelProvider>
     </div>
   );
 }

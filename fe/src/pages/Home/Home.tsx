@@ -2,92 +2,58 @@ import React, { useEffect, useRef, useState } from "react";
 import hotelAPI from "../../api/hotel";
 import cx from "classnames";
 import styles from "./Home.module.scss";
-import { IHotel, IHotelResponse, ISearchData } from "../../types";
-import { initSearchData } from "../../utils/state";
+import { IHotelResponse } from "../../types";
 import TSearchBar from "../../components/TSearchBar/TSearchBar";
 import THotelList from "../../components/THotelList/THotelList";
-import { loadHotels } from "../../utils/loadHotels";
-import loadinggif from "../../loading.jpg";
+import { useHotelContext } from "../../context";
+import { initSearchData } from "../../utils/state";
 
 const PAGE_SIZE = 10;
 
 const Home: React.FC = () => {
-  // I will use normal state as this is a small app and I don't need to use Redux or Context API
-  const [totalPages, setTotalPages] = React.useState<number>(0);
-  const [hotels, setHotels] = React.useState<IHotel[]>([]);
-  const [page, setPage] = useState(1);
-  const lastElementRef = useRef<HTMLDivElement>(null);
-  const [searchData, setSearchData] = useState<ISearchData>(initSearchData);
-  const [errorMessage, setErrorMessage] = useState<string>("");
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const {
+    page,
+    errorMessage,
+    isLoading,
+    setHotels,
+    setIsLoading,
+    setTotalPages,
+    setErrorMessage,
+  } = useHotelContext();
 
   // Initial load
   useEffect(() => {
     setIsLoading(true);
     hotelAPI
-      .gethotels({ page, count: PAGE_SIZE, ...searchData })
+      .gethotels({ page, count: PAGE_SIZE, ...initSearchData })
       .then((response: IHotelResponse & { message: string }) => {
-        setTotalPages(response.totalPages);
-        setHotels(response.data);
+        if (response.success === false) {
+          setErrorMessage(response.message);
+          return;          
+        }
+        setTotalPages(response.totalPages!);
+        setHotels(response.data!);
         setIsLoading(false);
       })
       .catch((error) => {
         setErrorMessage(error.message);
         setIsLoading(false);
       });
-  }, [searchData]);
-
-  // Infinite scroll
-  useEffect(() => {
-    // create an observer to watch the last element
-    const observer = new IntersectionObserver(onIntersect);
-    // if the last element exists, start observing it
-    if (observer && lastElementRef.current) {
-      observer.observe(lastElementRef.current);
-    }
-
-    return () => {
-      // stop observing the last element
-      if (observer && lastElementRef.current) {
-        observer.disconnect();
-      }
-    };
-  }, [hotels]);
-
-  // Load more hotels when the last element is visible
-  function onIntersect(entries: any) {
-    const target = entries[0];
-    if (target.isIntersecting) {
-      loadHotels(
-        page,
-        PAGE_SIZE,
-        totalPages,
-        searchData,
-        setPage,
-        setHotels,
-        hotelAPI
-      );
-    }
-  }
+  }, []);
 
   return (
     <div>
       <header className={cx(styles.header)}>
         <h1>Welcome to Travolta Hotels</h1>
-        <TSearchBar
-          setSearchData={setSearchData}
-          setPage={setPage}
-          setErrorMessage={setErrorMessage}
-          searchData={searchData}
-        />
-        {errorMessage && <p className={styles.errorMessage}>{errorMessage}</p>}
+        <TSearchBar />
+        {errorMessage && <p className={styles.errorMessage}>ERROR: {errorMessage}</p>}
       </header>
-      {
-        isLoading && <div className={cx(styles.loadinggif)}>
-           <img src={loadinggif} alt="loading..." />
+      {isLoading && (
+        <div className={cx(styles.loadinggif)}>
+          <img src={"https://i.pinimg.com/originals/57/e2/09/57e209296e586933febadf06e271a3d3.gif"} alt="loading..." />
         </div>
-      }
-      <THotelList hotels={hotels} lastElementRef={lastElementRef} />
+      )}
+      <THotelList />
     </div>
   );
 };
