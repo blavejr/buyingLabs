@@ -8,7 +8,7 @@ import TSearchBar from "../../components/TSearchBar/TSearchBar";
 import THotelList from "../../components/THotelList/THotelList";
 import { loadHotels } from "../../utils/loadHotels";
 
-const PAGE_SIZE = 3;
+const PAGE_SIZE = 10;
 
 const Home: React.FC = () => {
   // I will use normal state as this is a small app and I don't need to use Redux or Context API
