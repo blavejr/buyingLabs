@@ -1,3 +1,5 @@
+import moment from "moment";
+
 const possibleLocations = [
   {
     city: "Windhoek",
@@ -65,24 +67,18 @@ export default function generateDummyHotelData(count: number) {
         `https://via.placeholder.com/150?text=Image+${i * 3 - 1}`,
         `https://via.placeholder.com/150?text=Image+${i * 3}`,
       ],
-      created_at: new Date(),
-      updated_at: new Date(),
+      created_at: moment(),
+      updated_at: moment(),
     });
   }
 
   return hotelData;
 }
-
+// Generate a random date range from today to 365 days from now
 function generateRandomDateRange(): { start: Date; end: Date } {
-  const startDate = new Date();
-
-  // Random start date within the next month
-  startDate.setDate(startDate.getDate() + generateRandomNumber(1, 30));
-
-  const endDate = new Date(startDate);
-  endDate.setDate(endDate.getDate() + generateRandomNumber(1, 365)); 
-
-  return { start: startDate, end: endDate };
+  const startDate = moment().add(generateRandomNumber(1, 365), "days");
+  const endDate = moment(startDate).add(generateRandomNumber(1, 365), "days");
+  return { start: startDate.toDate(), end: endDate.toDate() };
 }
 
 function generateRandomNumber(min: number, max: number) {
