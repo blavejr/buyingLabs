@@ -7,6 +7,7 @@ import { initSearchData } from "../../utils/state";
 import TSearchBar from "../../components/TSearchBar/TSearchBar";
 import THotelList from "../../components/THotelList/THotelList";
 import { loadHotels } from "../../utils/loadHotels";
+import loadinggif from "../../loading.jpg";
 
 const PAGE_SIZE = 10;
 
@@ -18,17 +19,21 @@ const Home: React.FC = () => {
   const lastElementRef = useRef<HTMLDivElement>(null);
   const [searchData, setSearchData] = useState<ISearchData>(initSearchData);
   const [errorMessage, setErrorMessage] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   // Initial load
   useEffect(() => {
+    setIsLoading(true);
     hotelAPI
       .gethotels({ page, count: PAGE_SIZE, ...searchData })
-      .then((response: IHotelResponse & {message: string}) => {
+      .then((response: IHotelResponse & { message: string }) => {
         setTotalPages(response.totalPages);
         setHotels(response.data);
+        setIsLoading(false);
       })
       .catch((error) => {
         setErrorMessage(error.message);
+        setIsLoading(false);
       });
   }, [searchData]);
 
@@ -77,6 +82,11 @@ const Home: React.FC = () => {
         />
         {errorMessage && <p className={styles.errorMessage}>{errorMessage}</p>}
       </header>
+      {
+        isLoading && <div className={cx(styles.loadinggif)}>
+           <img src={loadinggif} alt="loading..." />
+        </div>
+      }
       <THotelList hotels={hotels} lastElementRef={lastElementRef} />
     </div>
   );
