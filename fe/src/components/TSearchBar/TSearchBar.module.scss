@@ -2,24 +2,23 @@
 @import '../../styles/variables.scss';
 
 .searchContainer {
-    display: flex;
-    flex-direction: row;
-    max-width: 50%;
-    margin: 0 auto;
-    padding-bottom: 2em;
-    justify-content: center;
-    align-items: center;
-    border-bottom: .1em solid;
-    border-color: $color-secondary;
-    margin-bottom: 2em;
-
+  display: flex;
+  flex-direction: row;
+  max-width: 50%;
+  margin: 0 auto;
+  padding-bottom: 2em;
+  justify-content: center;
+  align-items: center;
+  border-bottom: .1em solid;
+  border-color: $color-secondary;
+  margin-bottom: 2em;
 
   label {
     font-size: 20px;
     color: $color-tertiary;
     margin-right: 1em;
   }
-  
+
   input {
     height: 50px;
     border-radius: 5px;
@@ -33,7 +32,8 @@
       outline: none;
     }
   }
-  select{
+
+  select {
     height: 50px;
     border-radius: 5px;
     border: .1em solid;
@@ -44,5 +44,9 @@
       outline: none;
     }
   }
-}
 
+  @media screen and (max-width: $breakpoint) {
+    flex-direction: column;
+    max-width: 100%;
+  }
+}

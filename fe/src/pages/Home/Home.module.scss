@@ -2,36 +2,32 @@
 
 header {
   position: fixed;
-  top: 0;
   width: 100%;
+  top: 10em;
+  left: 50%;
+  padding: 2em;
+  transform: translate(-50%, -50%);
   background-color: white;
-  padding-top: 2em;
   h1{
     text-align: center;
     font-size: 5em;
     font-weight: bold;
     color: $color-tertiary;
     padding-bottom: .5em;
+    @media screen and (max-width: $breakpoint) {
+      font-size: 3em;
+    }
   }
   .errorMessage {
     text-align: center;
     color: red;
   }
-}
-
-.navList {
-  display: flex;
-  justify-content: space-between;
-  flex-shrink: 1;
-
-  li {
-    list-style: none;
-  }
-  a {
-    text-decoration: none;
-    color: #000;
+  @media screen and (max-width: $breakpoint) {
+    margin-top: 3em;
+    position: relative;
   }
 }
+
 
 .loadinggif{
   display: flex;

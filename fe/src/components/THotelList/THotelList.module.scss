@@ -71,4 +71,7 @@
         }
       }
     }
+    @media screen and (max-width: $breakpoint){
+    margin-top: .2em;
+    }
   }

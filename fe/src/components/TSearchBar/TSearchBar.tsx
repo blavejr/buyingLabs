@@ -36,6 +36,10 @@ export default function TSearchBar() {
     // Make a call to the API with the new search data
     setIsLoading(true);
     hotelAPI.gethotels({ page: 1, count: 10, ...searchData }).then((response) => {
+      if (response.success === false) {
+        setErrorMessage(response.message);
+        return;          
+      }
       setTotalPages(response.totalPages!);
       setHotels(response.data!);
       setIsLoading(false);
